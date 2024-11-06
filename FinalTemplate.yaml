@@ -35,7 +35,7 @@ Resources:
         UpdateRuntimeOn: "Auto"
       Handler: "com.example.weather_app.StreamLambdaHandler::handleRequest"
       Code:
-        S3Bucket: krvspk-bucket
+        S3Bucket: svk-bucket
         S3Key: weather_app-0.0.1-SNAPSHOT.jar
       Role: !GetAtt LambdaExecutionRole.Arn
       Environment:
