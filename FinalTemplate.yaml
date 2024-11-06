@@ -45,7 +45,7 @@ Resources:
       FileSystemConfigs: []
       FunctionName: "SpringFunction"
       Runtime: "java21"
-      PackageType: "jar"
+      PackageType: "Zip"
       LoggingConfig:
         LogFormat: "Text"
         LogGroup: "/aws/lambda/SpringFunction"
