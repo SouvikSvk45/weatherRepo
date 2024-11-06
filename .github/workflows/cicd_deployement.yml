@@ -1,0 +1,63 @@
+name: CI/CD Pipeline
+ 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+ 
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+ 
+    - name: Build with Maven
+      run: mvn clean install
+    - name: Configure AWS credentials v2
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Create s3 bucket
+      run: aws s3api create-bucket --bucket svk-bucket --region us-east-1
+    - name: Copy artifact to s3 bucket
+      run: aws s3 cp ./target/weather_app-0.0.1-SNAPSHOT.jar s3://svk-bucket/  
+    - name: Copy cloudtemplate to s3 bucket
+      run: aws s3 cp ./FinalTemplate.yaml s3://svk-bucket/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+ 
+    - name: Configure AWS credentials v2
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+ 
+    - name: Deploy to AWS CloudFormation
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: svk-stack
+        template: https://svk-bucket.s3.amazonaws.com/FinalTemplate.yaml
+        no-fail-on-empty-changeset: "1"
+        capabilities: CAPABILITY_NAMED_IAM
+        

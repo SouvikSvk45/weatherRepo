@@ -1,0 +1,152 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: this is WeatherApp using s3 , Lambda and APIgateway
+Resources:
+  
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+                - s3.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Description: IAM role for lambda to access s3 and dynamodb 
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      RoleName: LambdaExecutionRole
+
+  LambdaFunctionSpringFunction:
+    DependsOn: LambdaExecutionRole
+    Type: "AWS::Lambda::Function"
+    Properties:
+      MemorySize: 512
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 15
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "com.example.weather_app.StreamLambdaHandler::handleRequest"
+      Code:
+        S3Bucket: krvspk-bucket
+        S3Key: weather_app-0.0.1-SNAPSHOT.jar
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref DynamoDBTableWeatherData
+          KRVSPK_AWS_REGION: 'us-east-1'
+      FileSystemConfigs: []
+      FunctionName: "SpringFunction"
+      Runtime: "java21"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: "/aws/lambda/SpringFunction"
+      RecursiveLoop: "Terminate"
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+
+  DynamoDBTableWeatherData:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      SSESpecification:
+        SSEEnabled: false
+      TableName: "Weather"
+      AttributeDefinitions:
+      - AttributeType: "S"
+        AttributeName: "id"
+      ContributorInsightsSpecification:
+        Enabled: false
+      BillingMode: "PAY_PER_REQUEST"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      KeySchema:
+      DeletionProtectionEnabled: false
+      TableClass: "STANDARD"
+      Tags: []
+      TimeToLiveSpecification:
+        Enabled: false
+
+  weatherRestAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: WeatherRestAPI
+
+  ProxyResource:
+      Type: 'AWS::ApiGateway::Resource'
+      Properties:
+        RestApiId: !Ref weatherRestAPI
+        ParentId: !GetAtt 
+          - weatherRestAPI
+          - RootResourceId
+        PathPart: '{proxy+}'
+
+  ProxyResourceANY:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref weatherRestAPI
+      ResourceId: !Ref ProxyResource
+      HttpMethod: ANY
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: ANY
+        Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${LambdaFunctionSpringFunction.Arn}/invocations'
+  
+  Deployment:
+        Type: 'AWS::ApiGateway::Deployment'
+        DependsOn: ProxyResourceANY
+        Properties:
+          RestApiId: !Ref weatherRestAPI
+          Description: My deployment
+          StageName: dev
+
+  LambdaInvokPermissions:
+          Type: AWS::Lambda::Permission
+          Properties:
+            FunctionName: !Ref LambdaFunctionSpringFunction
+            Action: lambda:InvokeFunction
+            Principal: apigateway.amazonaws.com
+            SourceAccount: 651706771477
+  
+  SpringEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: "rate(5 minutes)"
+      Targets:
+        - Id: !Ref LambdaFunctionSpringFunction
+          Arn: !GetAtt LambdaFunctionSpringFunction.Arn
+      State: "ENABLED"
+      Name: "SpringLambdaEvent"    
+  
+  SpringEventRuleToSpringFunctionConnector:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaFunctionSpringFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt SpringEventRule.Arn
+             
+        
+
+
+  
+
+  
+      
+
+       
+
+
+       
+
+  
