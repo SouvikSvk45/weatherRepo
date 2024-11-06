@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.ui.Model;
 
+@EnableWebMvc
 @RestController
 @RequestMapping("/weather")
 public class WeatherController {
