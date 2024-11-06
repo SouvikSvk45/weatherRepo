@@ -60,7 +60,7 @@ Resources:
     Properties:
       SSESpecification:
         SSEEnabled: false
-      TableName: "Weather"
+      TableName: "WeatherData"
       AttributeDefinitions:
       - AttributeType: "S"
         AttributeName: "id"
@@ -70,6 +70,8 @@ Resources:
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: false
       KeySchema:
+      - KeyType: "HASH"
+        AttributeName: "id"
       DeletionProtectionEnabled: false
       TableClass: "STANDARD"
       Tags: []
