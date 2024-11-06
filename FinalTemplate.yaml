@@ -41,7 +41,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref DynamoDBTableWeatherData
-          KRVSPK_AWS_REGION: 'us-east-1'
+          SVK_AWS_REGION: 'us-east-1'
       FileSystemConfigs: []
       FunctionName: "SpringFunction"
       Runtime: "java21"
