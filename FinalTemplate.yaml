@@ -101,11 +101,11 @@ Resources:
     Properties:
       RestApiId: !Ref weatherRestAPI
       ResourceId: !Ref ProxyResource
-      HttpMethod: ANY
+      HttpMethod: GET
       AuthorizationType: NONE
       Integration:
         Type: AWS_PROXY
-        IntegrationHttpMethod: ANY
+        IntegrationHttpMethod: GET
         Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${LambdaFunctionSpringFunction.Arn}/invocations'
   
   Deployment:
