@@ -81,8 +81,8 @@ Resources:
   weatherRestAPI:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: WeatherRestAPI      
-
+      Name: WeatherRestAPI
+      
   ProxyResource:
       Type: 'AWS::ApiGateway::Resource'
       Properties:
