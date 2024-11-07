@@ -79,14 +79,14 @@ Resources:
         Enabled: false
 
   weatherRestAPI:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: WeatherRestAPI
-      endpointConfigurationTypes: REGIONAL
-      ignore: documentation
-    EndpointConfiguration:
-      Types:
-          - REGIONAL
+  Type: 'AWS::ApiGateway::RestApi'
+  Properties:
+    Name: WeatherRestAPI
+    endpointConfigurationTypes: REGIONAL
+    ignore: documentation
+  EndpointConfiguration:
+    Types:
+      - REGIONAL
 
   ProxyResource:
       Type: 'AWS::ApiGateway::Resource'
