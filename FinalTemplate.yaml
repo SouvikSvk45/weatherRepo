@@ -1,8 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: this is WeatherApp using s3 , Lambda and APIgateway
-Globals:
-  Api:
-    EndpointConfiguration: REGIONAL
 Resources:
   
   LambdaExecutionRole:
