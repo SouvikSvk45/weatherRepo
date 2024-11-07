@@ -81,9 +81,7 @@ Resources:
   weatherRestAPI:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: WeatherRestAPI
-      Parameters:
-         endpointConfigurationTypes: REGIONAL      
+      Name: WeatherRestAPI      
 
   ProxyResource:
       Type: 'AWS::ApiGateway::Resource'
