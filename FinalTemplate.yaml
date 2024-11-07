@@ -110,6 +110,9 @@ Resources:
         Properties:
           RestApiId: !Ref weatherRestAPI
           Description: My deployment
+          EndpointConfiguration:
+            Types:
+              - REGIONAL
           StageName: dev
 
   LambdaInvokPermissions:
