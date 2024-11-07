@@ -79,9 +79,9 @@ Resources:
         Enabled: false
 
   weatherRestAPI:
-  Type: 'AWS::ApiGateway::RestApi'
-  Properties:
-    Name: WeatherRestAPI
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: WeatherRestAPI
 
   ProxyResource:
       Type: 'AWS::ApiGateway::Resource'
