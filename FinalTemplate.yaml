@@ -15,7 +15,7 @@ Resources:
                 - s3.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-       Policies:
+      Policies:
         - PolicyName: "MyLambdaPolicy"
           PolicyDocument:
             Version: "2012-10-17"
