@@ -15,6 +15,18 @@ Resources:
                 - s3.amazonaws.com
             Action:
               - 'sts:AssumeRole'
+       Policies:
+        - PolicyName: "MyLambdaPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+
       Description: IAM role for lambda to access s3 and dynamodb 
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
