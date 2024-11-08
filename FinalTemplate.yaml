@@ -106,7 +106,7 @@ Resources:
         ParentId: !GetAtt 
           - weatherRestAPI
           - RootResourceId
-        PathPart: '{proxy+}'
+        PathPart:'{proxy+}'
 
   ProxyResourceANY:
     Type: 'AWS::ApiGateway::Method'
@@ -153,11 +153,9 @@ Resources:
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceArn: !GetAtt SpringEventRule.Arn
-                
-  Outputs:
-    WeatherApiEndpoint:
-      Value: !Sub 
-        'https://${weatherRestAPI}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${Deployment}/'
+             
+        
+
 
   
 
