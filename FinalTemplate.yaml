@@ -140,7 +140,7 @@ Resources:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
-      FunctionName: !GetAtt WeatherLambdaFunction.Arn
+      FunctionName: !GetAtt LambdaFunctionSpringFunction.Arn
       Principal: apigateway.amazonaws.com
       SourceArn: !Join 
         - ''
