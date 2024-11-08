@@ -106,7 +106,7 @@ Resources:
         ParentId: !GetAtt 
           - weatherRestAPI
           - RootResourceId
-        PathPart: '{proxy+}'
+        PathPart:'{proxy+}'
 
   ProxyResourceANY:
     Type: 'AWS::ApiGateway::Method'
