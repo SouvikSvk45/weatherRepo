@@ -52,7 +52,7 @@ Resources:
           Properties:
             Path: /weather/kolkata
             Method: GET
-            RestApiId: !Ref MyApiGateway
+            RestApiId: !Ref weatherRestAPI
       Code:
         S3Bucket: svk-bucket
         S3Key: weather_app-0.0.1-SNAPSHOT.jar
