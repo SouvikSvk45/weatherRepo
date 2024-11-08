@@ -155,7 +155,10 @@ Resources:
       SourceArn: !GetAtt SpringEventRule.Arn
              
         
-
+  Outputs:
+    WeatherApiEndpoint:
+      Value: !Sub 
+        'https://${WeatherRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/${WeatherApiDeploymentStage}/'
 
   
 
