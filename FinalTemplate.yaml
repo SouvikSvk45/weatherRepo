@@ -46,6 +46,13 @@ Resources:
       RuntimeManagementConfig:
         UpdateRuntimeOn: "Auto"
       Handler: "com.example.weather_app.StreamLambdaHandler::handleRequest"
+      Events:
+        ApiGateway:
+          Type: Api
+          Properties:
+            Path: /weather/kolkata
+            Method: GET
+            RestApiId: !Ref MyApiGateway
       Code:
         S3Bucket: svk-bucket
         S3Key: weather_app-0.0.1-SNAPSHOT.jar
@@ -66,6 +73,11 @@ Resources:
         Size: 512
       Architectures:
       - "x86_64"
+  
+  MyApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
 
   DynamoDBTableWeatherData:
     Type: "AWS::DynamoDB::Table"
