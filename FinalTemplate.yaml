@@ -73,11 +73,6 @@ Resources:
         Size: 512
       Architectures:
       - "x86_64"
-  
-  MyApiGateway:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: dev
 
   DynamoDBTableWeatherData:
     Type: "AWS::DynamoDB::Table"
