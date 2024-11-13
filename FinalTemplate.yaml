@@ -90,54 +90,10 @@ Resources:
       TimeToLiveSpecification:
         Enabled: false
 
-  weatherRestAPI:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: WeatherRestAPI
-      Description: "Weather API Gateway"
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-  
-  ProxyResource:
-      Type: 'AWS::ApiGateway::Resource'
-      Properties:
-        RestApiId: !Ref weatherRestAPI
-        ParentId: !GetAtt 
-          - weatherRestAPI
-          - RootResourceId
-        PathPart: '{proxy+}'
-
-  ProxyResourceANY:
-    Type: 'AWS::ApiGateway::Method'
-    Properties:
-      RestApiId: !Ref weatherRestAPI
-      ResourceId: !Ref ProxyResource
-      HttpMethod: GET
-      AuthorizationType: NONE
-      Integration:
-        Type: AWS_PROXY
-        IntegrationHttpMethod: ANY
-        Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${LambdaFunctionSpringFunction.Arn}/invocations'
-  
-  Deployment:
-        Type: 'AWS::ApiGateway::Deployment'
-        DependsOn: ProxyResourceANY
-        Properties:
-          RestApiId: !Ref weatherRestAPI
-          Description: My deployment
-          StageName: dev
-
   LambdaInvokPermissions:
           Type: AWS::Lambda::Permission
           Properties:
-            FunctionName: !Ref 
-Outputs:
-  ApiUrl:
-    Description: "URL of the API Gateway"
-    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/"
-
-LambdaFunctionSpringFunction
+            FunctionName: !Ref LambdaFunctionSpringFunction
             Action: lambda:InvokeFunction
             Principal: apigateway.amazonaws.com
             SourceAccount: 651706771477
@@ -159,6 +115,26 @@ LambdaFunctionSpringFunction
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceArn: !GetAtt SpringEventRule.Arn
+
+  MyApiGateway:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      BodyS3Location:
+        Bucket: svk-bucket
+        Key: FinalTemplate.yaml
+      Name: MyApiGateway
+      Description: API Gateway created from a YAML file
+
+  MyApiDeployment:
+    Type: 'AWS::ApiGateway::Deployment'
+    Properties:
+      RestApiId: !Ref MyApiGateway
+      StageName: prod
+
+Outputs:
+  ApiUrl:
+    Description: "URL of the API Gateway"
+    Value: !Sub "https://${MyApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/"
              
         
 
