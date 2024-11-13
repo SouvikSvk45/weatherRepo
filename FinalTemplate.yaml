@@ -119,6 +119,9 @@ Resources:
   MyApiGateway:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
+      BodyS3Location:
+        Bucket: svk-bucket
+        Key: https://svk-bucket.s3.amazonaws.com/FinalTemplate.yaml
       Name: MyApiGateway
       Description: API Gateway created from a YAML file
 
