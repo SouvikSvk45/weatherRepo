@@ -91,7 +91,7 @@ Resources:
         Enabled: false
 
   weatherRestAPI:
-    Type: 'AWS::ApiGateway::RestApi'
+    Type: AWS::ApiGateway::RestApi
     Properties:
       Name: WeatherRestAPI
       Description: "Weather API Gateway"
@@ -153,6 +153,11 @@ Resources:
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
       SourceArn: !GetAtt SpringEventRule.Arn
+
+Outputs:
+  ApiUrl:
+    Description: "URL of the API Gateway"
+    Value: !Sub "https://${weatherRestAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/"
              
         
 
