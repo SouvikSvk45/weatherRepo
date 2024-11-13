@@ -117,7 +117,7 @@ Resources:
       AuthorizationType: NONE
       Integration:
         Type: AWS_PROXY
-        IntegrationHttpMethod: GET
+        IntegrationHttpMethod: ANY
         Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${LambdaFunctionSpringFunction.Arn}/invocations'
   
   Deployment:
@@ -131,7 +131,13 @@ Resources:
   LambdaInvokPermissions:
           Type: AWS::Lambda::Permission
           Properties:
-            FunctionName: !Ref LambdaFunctionSpringFunction
+            FunctionName: !Ref 
+Outputs:
+  ApiUrl:
+    Description: "URL of the API Gateway"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+
+LambdaFunctionSpringFunction
             Action: lambda:InvokeFunction
             Principal: apigateway.amazonaws.com
             SourceAccount: 651706771477
