@@ -157,7 +157,7 @@ Resources:
 Outputs:
   ApiUrl:
     Description: "URL of the API Gateway"
-    Value: !Sub "https://${weatherRestAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+    Value: !Sub "https://${weatherRestAPI}.execute-api.${AWS::Region}.amazonaws.com/dev/"
              
         
 
