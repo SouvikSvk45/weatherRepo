@@ -91,7 +91,7 @@ Resources:
         Enabled: false
 
   weatherRestAPI:
-    Type: AWS::ApiGateway::RestApi
+    Type: 'AWS::ApiGateway::RestApi'
     Properties:
       Name: WeatherRestAPI
       Description: "Weather API Gateway"
